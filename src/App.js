@@ -1,26 +1,29 @@
 // import logo from './logo.svg';
-import './App.css';
-import { useEffect, useState } from 'react';
+// import './App.css';
+import React, { useState } from 'react';
+import Login from './component/Login/Login';
+import Home from './component/Home/Home';
+import MainHeader from './component/MainHeader/MainHeader';
 
 function App() {
-  console.log('App Component Rendered');
-  let [resourceType, setResourceType] = useState('HOME');
+  const [isLoggedIn, updateIsLoggedIn] = useState(false);
 
-  useEffect(() => {
-    console.log(resourceType);
-  }, [resourceType]);
+  const loginHandler = (email, password) => {
+    updateIsLoggedIn(true);
+  };
 
-  const updateResType = (newState) => {
-    return (event) => setResourceType(newState);
+  const logoutHandler = () => {
+    updateIsLoggedIn(false);
   };
 
   return (
-    <div className="App">
-      <button onClick={updateResType('HOME')}>HOME</button>
-      <button onClick={updateResType('ABOUT')}>ABOUT</button>
-      <button onClick={updateResType('CONTACT')}>CONTACT</button>
-      <h3>{resourceType}</h3>
-    </div>
+    <React.Fragment>
+      <MainHeader isAuthenticated={isLoggedIn} onLogout={logoutHandler} />
+      <main>
+        {!isLoggedIn && <Login onLogin={loginHandler} />}
+        {isLoggedIn && <Home onLogout={logoutHandler} />}
+      </main>
+    </React.Fragment>
   );
 }
 
